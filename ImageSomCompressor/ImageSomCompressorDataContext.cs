@@ -9,8 +9,18 @@ namespace ImageSomCompressor
     internal class ImageSomCompressorDataContext : INotifyPropertyChanged
     {
         private Bitmap image;
-
         private BitmapImage imageSource;
+        private double progressBar;
+
+        public double ProgressBar
+        {
+            get => progressBar;
+            set
+            {
+                progressBar = value;
+                OnPropertyChanged(nameof(ProgressBar));
+            }
+        }
 
         public BitmapImage ImageSource
         {

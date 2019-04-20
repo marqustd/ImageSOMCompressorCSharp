@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using ImageSomCompressor.Core.Som.Neuron;
 using ImageSomCompressor.Core.Som.Vector;
 
@@ -9,7 +11,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
         private readonly int height;
         private readonly INeuron[,] lattice;
         private readonly double matrixRadius;
-        private readonly double numberOfIterations;
+        private readonly int numberOfIterations;
         private readonly double timeConstant;
         private readonly int width;
         private int iteration;
@@ -30,7 +32,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             InitializeConnections(inputDimension);
         }
 
-        public void Train(IVector[] input)
+        public void Train(IEnumerable<IVector> input, BackgroundWorker worker)
         {
             while (iteration < numberOfIterations)
             {
@@ -38,7 +40,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
                 foreach (var currentInput in input)
                 {
-                    var bmu = CalculateBMU(currentInput);
+                    var bmu = CalculateBmu(currentInput);
 
                     var (xStart, xEnd, yStart, yEnd) = GetRadiusIndexes(bmu, currentRadius);
 
@@ -57,6 +59,10 @@ namespace ImageSomCompressor.Core.Som.Lattice
                     }
                 }
 
+                var percentComplete =
+                    (int) (iteration / (float) numberOfIterations * 100);
+
+                worker.ReportProgress(percentComplete);
                 iteration++;
                 learningRate = learningRate * Math.Exp(-(double) iteration / numberOfIterations);
             }
@@ -105,7 +111,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             return Math.Exp(-(Math.Pow(distance, 2.0) / Math.Pow(radius, 2.0)));
         }
 
-        private INeuron CalculateBMU(IVector input)
+        private INeuron CalculateBmu(IVector input)
         {
             var bmu = lattice[0, 0];
             var bestDist = input.EuclideanDistance(bmu.Weights);
