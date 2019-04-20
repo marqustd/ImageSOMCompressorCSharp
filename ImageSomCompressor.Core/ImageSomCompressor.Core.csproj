@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KohonenSom.cs" />
-    <Compile Include="Node.cs" />
+    <Compile Include="Neuron\INeuron.cs" />
+    <Compile Include="Neuron\Neuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SomLattice\ISomLattice.cs" />
+    <Compile Include="Vector\IVector.cs" />
+    <Compile Include="Vector\Vector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
