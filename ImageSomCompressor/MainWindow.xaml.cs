@@ -1,28 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ImageSomCompressor.Core.SomLattice;
+using ImageSomCompressor.Core.Vector;
+using Vector = ImageSomCompressor.Core.Vector.Vector;
 
 namespace ImageSomCompressor
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ImageSomCompressorDataContext();
+
+            var inputVector = new Vector {2, 2};
+
+            IVector[] input =
+            {
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector
+            };
+            var som = new SomLattice(3, 3, inputVector.Count, 100, 0.5);
+            som.Train(input);
+        }
+
+        private void OnBtnLoadClick(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "1.JPeg Image|*.jpg|2.Bitmap Image|*.bmp",
+                Title = "Please select an image file."
+            };
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var bitmap = new Bitmap(openFileDialog.FileName);
+                PrintImageOnGui(bitmap);
+            }
+        }
+
+        private void OnBtnTrainClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PrintImageOnGui(Image image)
+        {
+            using (var memory = new MemoryStream())
+            {
+                image.Save(memory, ImageFormat.Bmp);
+                memory.Position = 0;
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    (DataContext as ImageSomCompressorDataContext).ImageSource = bitmapImage;
+                }));
+            }
         }
     }
 }

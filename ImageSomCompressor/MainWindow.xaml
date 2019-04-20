@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="1" Margin="10" Background="Black" BorderBrush="Gainsboro" BorderThickness="1">
+            <Image UseLayoutRounding="True" Source="{Binding Path=ImageSource}" />
+        </Border>
+
+        <StackPanel>
+            <Button Name="BtnLoad" Click="OnBtnLoadClick">Load Image</Button>
+            <Button Name="BtnTrain" Click="OnBtnTrainClick">Train</Button>
+        </StackPanel>
     </Grid>
 </Window>
