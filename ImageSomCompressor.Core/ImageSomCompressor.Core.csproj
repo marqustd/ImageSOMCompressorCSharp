@@ -36,13 +36,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Neuron\INeuron.cs" />
-    <Compile Include="Neuron\Neuron.cs" />
+    <Compile Include="Som\Neuron\INeuron.cs" />
+    <Compile Include="Som\Neuron\Neuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SomLattice\ISomLattice.cs" />
-    <Compile Include="SomLattice\SomLattice.cs" />
-    <Compile Include="Vector\IVector.cs" />
-    <Compile Include="Vector\Vector.cs" />
+    <Compile Include="Som\Lattice\ILattice.cs" />
+    <Compile Include="Som\Lattice\Lattice.cs" />
+    <Compile Include="Som\Vector\IVector.cs" />
+    <Compile Include="Som\Vector\Vector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

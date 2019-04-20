@@ -1,10 +1,10 @@
 ﻿using System;
-using ImageSomCompressor.Core.Neuron;
-using ImageSomCompressor.Core.Vector;
+using ImageSomCompressor.Core.Som.Neuron;
+using ImageSomCompressor.Core.Som.Vector;
 
-namespace ImageSomCompressor.Core.SomLattice
+namespace ImageSomCompressor.Core.Som.Lattice
 {
-    public class SomLattice : ISomLattice
+    public class Lattice : ILattice
     {
         private readonly int height;
         private readonly INeuron[,] lattice;
@@ -15,7 +15,7 @@ namespace ImageSomCompressor.Core.SomLattice
         private int iteration;
         private double learningRate;
 
-        public SomLattice(int width, int height, int inputDimension, int numberOfIterations, double learningRate)
+        public Lattice(int width, int height, int inputDimension, int numberOfIterations, double learningRate)
         {
             this.width = width;
             this.height = height;

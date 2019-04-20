@@ -1,6 +1,6 @@
-﻿using ImageSomCompressor.Core.Vector;
+﻿using ImageSomCompressor.Core.Som.Vector;
 
-namespace ImageSomCompressor.Core.Neuron
+namespace ImageSomCompressor.Core.Som.Neuron
 {
     public interface INeuron
     {

@@ -1,8 +1,7 @@
 ﻿using System;
-using ImageSomCompressor.Core.Vector;
-using static System.Math;
+using ImageSomCompressor.Core.Som.Vector;
 
-namespace ImageSomCompressor.Core.Neuron
+namespace ImageSomCompressor.Core.Som.Neuron
 {
     internal class Neuron : INeuron
     {
@@ -56,8 +55,8 @@ namespace ImageSomCompressor.Core.Neuron
 
         public double Distance(INeuron neuron)
         {
-            return Pow(X - neuron.X, 2)
-                   + Pow(Y - neuron.Y, 2);
+            return Math.Pow(X - neuron.X, 2)
+                   + Math.Pow(Y - neuron.Y, 2);
         }
     }
 }

@@ -5,9 +5,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using ImageSomCompressor.Core.SomLattice;
-using ImageSomCompressor.Core.Vector;
-using Vector = ImageSomCompressor.Core.Vector.Vector;
+using ImageSomCompressor.Core.Som.Lattice;
+using ImageSomCompressor.Core.Som.Vector;
+using Vector = ImageSomCompressor.Core.Som.Vector.Vector;
 
 namespace ImageSomCompressor
 {
@@ -20,24 +20,6 @@ namespace ImageSomCompressor
         {
             InitializeComponent();
             DataContext = new ImageSomCompressorDataContext();
-
-            var inputVector = new Vector {2, 2};
-
-            IVector[] input =
-            {
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector,
-                inputVector
-            };
-            var som = new SomLattice(3, 3, inputVector.Count, 100, 0.5);
-            som.Train(input);
         }
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
@@ -56,7 +38,23 @@ namespace ImageSomCompressor
 
         private void OnBtnTrainClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var inputVector = new Vector { 2, 2 };
+
+            IVector[] input =
+            {
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector,
+                inputVector
+            };
+            var som = new Lattice(3, 3, inputVector.Count, 100, 0.5);
+            som.Train(input);
         }
 
         private void PrintImageOnGui(Image image)

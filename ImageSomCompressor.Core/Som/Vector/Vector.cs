@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ImageSomCompressor.Core.Vector
+namespace ImageSomCompressor.Core.Som.Vector
 {
     public class Vector : List<double>, IVector
     {
