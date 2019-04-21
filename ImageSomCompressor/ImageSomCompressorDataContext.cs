@@ -8,15 +8,26 @@ namespace ImageSomCompressor
 {
     internal class ImageSomCompressorDataContext : INotifyPropertyChanged
     {
-        private int height;
-        private Bitmap originalImage;
         private Bitmap changedImage;
+        private string currentIteration;
+        private int height;
         private BitmapImage imageSource;
         private double learningRate;
         private int numberOfIterations;
+        private Bitmap originalImage;
         private double progressBar;
 
         private int width;
+
+        public string CurrentIteration
+        {
+            get => currentIteration;
+            set
+            {
+                currentIteration = value;
+                OnPropertyChanged(nameof(CurrentIteration));
+            }
+        }
 
         public int Width
         {
@@ -87,6 +98,7 @@ namespace ImageSomCompressor
                 OnPropertyChanged(nameof(OriginalImage));
             }
         }
+
         public Bitmap ChangedImage
         {
             get => changedImage;

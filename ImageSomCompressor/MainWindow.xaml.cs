@@ -72,7 +72,10 @@ namespace ImageSomCompressor
 
         private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            (DataContext as ImageSomCompressorDataContext).ProgressBar = e.ProgressPercentage;
+            var dataContext = DataContext as ImageSomCompressorDataContext;
+            dataContext.ProgressBar = e.ProgressPercentage;
+            dataContext.CurrentIteration =
+                $"{(int) ((float) e.ProgressPercentage / 100 * dataContext.NumberOfIterations)}/{dataContext.NumberOfIterations}";
         }
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
@@ -122,7 +125,7 @@ namespace ImageSomCompressor
 
         private void ShowChangedImage()
         {
-            var dataContext = (DataContext as ImageSomCompressorDataContext);
+            var dataContext = DataContext as ImageSomCompressorDataContext;
             var image = dataContext.OriginalImage;
             var input = dataContext.OriginalImage.ToVectors().ToArray();
             var result = lattice.GenerateResult(input);
@@ -138,7 +141,7 @@ namespace ImageSomCompressor
 
         private void OnBtnSaveImageClick(object sender, RoutedEventArgs e)
         {
-            var saveFileDialog = new SaveFileDialog()
+            var saveFileDialog = new SaveFileDialog
             {
                 Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
                 Title = "Please select an image file.",
@@ -150,7 +153,7 @@ namespace ImageSomCompressor
                 switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        bitmap.Save(saveFileDialog.FileName,ImageFormat.Jpeg);
+                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Jpeg);
                         break;
                     case 2:
                         bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);

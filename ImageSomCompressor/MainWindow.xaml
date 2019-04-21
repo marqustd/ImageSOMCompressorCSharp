@@ -98,6 +98,11 @@
 
         </StackPanel>
 
-        <ProgressBar Grid.Row="1" Value="{Binding Path=ProgressBar, UpdateSourceTrigger=PropertyChanged}" />
+        <Grid Grid.Row="1">
+            <ProgressBar Value="{Binding Path=ProgressBar, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding Path=CurrentIteration, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
     </Grid>
 </Window>

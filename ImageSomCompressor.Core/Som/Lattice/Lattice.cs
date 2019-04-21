@@ -61,11 +61,12 @@ namespace ImageSomCompressor.Core.Som.Lattice
                     }
                 });
 
-                worker.ReportProgress((int)(iteration / (float)numberOfIterations * 100));
+                worker.ReportProgress((int) (iteration / (float) numberOfIterations * 100));
                 iteration++;
                 learningRate = learningRate * Math.Exp(-(double) iteration / numberOfIterations);
             }
-            worker.ReportProgress(1);
+
+            worker.ReportProgress(100);
         }
 
         public IEnumerable<IVector> GenerateResult(IVector[] input)
@@ -144,13 +145,11 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         private void InitializeConnections(int inputDimension)
         {
-            Parallel.For(0, width, x =>
-            {
-                Parallel.For(0, width, y =>
+            Parallel.For(0, width,
+                x =>
                 {
-                    lattice[x, y] = new Neuron.Neuron(inputDimension) { X = x, Y = y };
+                    Parallel.For(0, width, y => { lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
                 });
-            });
         }
     }
 }
