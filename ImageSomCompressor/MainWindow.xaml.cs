@@ -35,6 +35,15 @@ namespace ImageSomCompressor
             backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
         }
 
+        private void SetStartValues()
+        {
+            var dataContext = DataContext as ImageSomCompressorDataContext;
+            dataContext.Width = 3;
+            dataContext.Height = 3;
+            dataContext.LearningRate = 0.5d;
+            dataContext.NumberOfIterations = 30;
+        }
+
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
@@ -68,6 +77,7 @@ namespace ImageSomCompressor
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
         {
+            SetStartValues();
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
@@ -110,7 +120,7 @@ namespace ImageSomCompressor
             }
         }
 
-        private void OnBtnCompressClick(object sender, RoutedEventArgs e)
+        private void ShowChangedImage()
         {
             var dataContext = (DataContext as ImageSomCompressorDataContext);
             var image = dataContext.OriginalImage;
@@ -119,6 +129,11 @@ namespace ImageSomCompressor
             var bitmap = MakeBitmap(result, image.Height, image.Width);
             dataContext.ChangedImage = bitmap;
             PrintImageOnGui(bitmap);
+        }
+
+        private void OnBtnCompressClick(object sender, RoutedEventArgs e)
+        {
+            ShowChangedImage();
         }
 
         private void OnBtnSaveImageClick(object sender, RoutedEventArgs e)
