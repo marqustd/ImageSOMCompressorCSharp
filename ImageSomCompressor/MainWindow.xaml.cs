@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -53,7 +52,7 @@ namespace ImageSomCompressor
             lattice.Train(input, worker);
         }
 
-        private Bitmap MakeBitmap(IEnumerable<IVector> input, int height, int width)
+        private Bitmap MakeBitmap(IVector[] input, int height, int width)
         {
             var array = input.ToArray();
             var bitmap = new Bitmap(width, height);

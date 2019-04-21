@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +33,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             InitializeConnections(inputDimension);
         }
 
-        public void Train(IEnumerable<IVector> input, BackgroundWorker worker)
+        public void Train(IVector[] input, BackgroundWorker worker)
         {
             while (iteration < numberOfIterations)
             {
@@ -69,14 +68,14 @@ namespace ImageSomCompressor.Core.Som.Lattice
             worker.ReportProgress(100);
         }
 
-        public IEnumerable<IVector> GenerateResult(IVector[] input)
+        public IVector[] GenerateResult(IVector[] input)
         {
             return input.Select(CalculateBmu).Select(node => new Vector.Vector
             {
                 node.R,
                 node.G,
                 node.B
-            });
+            }).ToArray();
         }
 
         internal (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)
