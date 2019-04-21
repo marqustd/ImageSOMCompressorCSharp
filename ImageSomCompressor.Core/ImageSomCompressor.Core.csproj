@@ -37,17 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Som\Extensions\BitmapExtensions.cs" />
-    <Compile Include="Som\Neuron\INeuron.cs" />
-    <Compile Include="Som\Neuron\Neuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Som\Lattice\ILattice.cs" />
-    <Compile Include="Som\Lattice\Lattice.cs" />
-    <Compile Include="Som\Vector\IVector.cs" />
-    <Compile Include="Som\Vector\Vector.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Image\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
