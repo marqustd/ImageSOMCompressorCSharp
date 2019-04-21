@@ -10,35 +10,35 @@ namespace ImageSomCompressor.Core.Som.Lattice
 {
     public class Lattice : ILattice
     {
-        private readonly int height;
-        private readonly INeuron[,] lattice;
-        private readonly double matrixRadius;
-        private readonly int numberOfIterations;
-        private readonly double timeConstant;
-        private readonly int width;
-        private int iteration;
-        private double learningRate;
+        private readonly int _height;
+        private readonly INeuron[,] _lattice;
+        private readonly double _matrixRadius;
+        private readonly int _numberOfIterations;
+        private readonly double _timeConstant;
+        private readonly int _width;
+        private int _iteration;
+        private double _learningRate;
 
         public Lattice(int width, int height, int inputDimension, int numberOfIterations, double learningRate)
         {
-            this.width = width;
-            this.height = height;
-            lattice = new INeuron[width, height];
-            this.numberOfIterations = numberOfIterations;
-            this.learningRate = learningRate;
-            iteration = 0;
+            _width = width;
+            _height = height;
+            _lattice = new INeuron[width, height];
+            _numberOfIterations = numberOfIterations;
+            _learningRate = learningRate;
+            _iteration = 0;
 
-            matrixRadius = Math.Max(width, height) / 2;
-            timeConstant = numberOfIterations / Math.Log(matrixRadius);
+            _matrixRadius = Math.Max(width, height) / 2;
+            _timeConstant = numberOfIterations / Math.Log(_matrixRadius);
 
             InitializeConnections(inputDimension);
         }
 
         public void Train(IEnumerable<IVector> input, BackgroundWorker worker)
         {
-            while (iteration < numberOfIterations)
+            while (_iteration < _numberOfIterations)
             {
-                var currentRadius = CalculateNeighborhoodRadius(iteration);
+                var currentRadius = CalculateNeighborhoodRadius(_iteration);
 
                 Parallel.ForEach(input, currentInput =>
                 {
@@ -55,15 +55,15 @@ namespace ImageSomCompressor.Core.Som.Lattice
                             if (distance <= Math.Pow(currentRadius, 2.0))
                             {
                                 var distanceDrop = GetDistanceDrop(distance, currentRadius);
-                                processingNeuron.UpdateWeights(currentInput, learningRate, distanceDrop);
+                                processingNeuron.UpdateWeights(currentInput, _learningRate, distanceDrop);
                             }
                         }
                     }
                 });
 
-                worker.ReportProgress((int) (iteration / (float) numberOfIterations * 100));
-                iteration++;
-                learningRate = learningRate * Math.Exp(-(double) iteration / numberOfIterations);
+                worker.ReportProgress((int) (_iteration / (float) _numberOfIterations * 100));
+                _iteration++;
+                _learningRate = _learningRate * Math.Exp(-(double) _iteration / _numberOfIterations);
             }
 
             worker.ReportProgress(100);
@@ -85,18 +85,18 @@ namespace ImageSomCompressor.Core.Som.Lattice
             xStart = xStart < 0 ? 0 : xStart;
 
             var xEnd = (int) (xStart + currentRadius * 2 + 1);
-            if (xEnd > width)
+            if (xEnd > _width)
             {
-                xEnd = width;
+                xEnd = _width;
             }
 
             var yStart = (int) (bmu.Y - currentRadius - 1);
             yStart = yStart < 0 ? 0 : yStart;
 
             var yEnd = (int) (yStart + currentRadius * 2 + 1);
-            if (yEnd > height)
+            if (yEnd > _height)
             {
-                yEnd = height;
+                yEnd = _height;
             }
 
             return (xStart, xEnd, yStart, yEnd);
@@ -104,17 +104,17 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         private INeuron GetNeuron(int indexX, int indexY)
         {
-            if (indexX > width || indexY > height)
+            if (indexX > _width || indexY > _height)
             {
                 throw new ArgumentException("Wrong index!");
             }
 
-            return lattice[indexX, indexY];
+            return _lattice[indexX, indexY];
         }
 
         private double CalculateNeighborhoodRadius(double iteration)
         {
-            return matrixRadius * Math.Exp(-iteration / timeConstant);
+            return _matrixRadius * Math.Exp(-iteration / _timeConstant);
         }
 
         private double GetDistanceDrop(double distance, double radius)
@@ -124,17 +124,17 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         private INeuron CalculateBmu(IVector input)
         {
-            var bmu = lattice[0, 0];
+            var bmu = _lattice[0, 0];
             var bestDist = input.EuclideanDistance(bmu.Weights);
 
-            for (var i = 0; i < width; i++)
+            for (var i = 0; i < _width; i++)
             {
-                for (var j = 0; j < height; j++)
+                for (var j = 0; j < _height; j++)
                 {
-                    var distance = input.EuclideanDistance(lattice[i, j].Weights);
+                    var distance = input.EuclideanDistance(_lattice[i, j].Weights);
                     if (distance < bestDist)
                     {
-                        bmu = lattice[i, j];
+                        bmu = _lattice[i, j];
                         bestDist = distance;
                     }
                 }
@@ -145,10 +145,11 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         private void InitializeConnections(int inputDimension)
         {
-            Parallel.For(0, width,
+            Parallel.For(0, _width,
                 x =>
                 {
-                    Parallel.For(0, width, y => { lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
+                    Parallel.For(0, _width,
+                        y => { _lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
                 });
         }
     }

@@ -17,22 +17,22 @@ namespace ImageSomCompressor
     public partial class MainWindow : Window
     {
         private const int InputDimension = 3; //cuz of RGB
-        private readonly BackgroundWorker backgroundWorker;
-        private ILattice lattice;
+        private readonly BackgroundWorker _backgroundWorker;
+        private ILattice _lattice;
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new ImageSomCompressorDataContext();
-            lattice = new Lattice(3, 3, InputDimension, 100, 0.5);
-            backgroundWorker = new BackgroundWorker
+            _lattice = new Lattice(3, 3, InputDimension, 100, 0.5);
+            _backgroundWorker = new BackgroundWorker
             {
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = true
             };
 
-            backgroundWorker.DoWork += BackgroundWorker_DoWork;
-            backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
+            _backgroundWorker.DoWork += BackgroundWorker_DoWork;
+            _backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
         }
 
         private void SetStartValues()
@@ -50,7 +50,7 @@ namespace ImageSomCompressor
 
             var input = (IVector[]) e.Argument;
 
-            lattice.Train(input, worker);
+            _lattice.Train(input, worker);
         }
 
         private Bitmap MakeBitmap(IEnumerable<IVector> input, int height, int width)
@@ -97,11 +97,12 @@ namespace ImageSomCompressor
         private void OnBtnTrainClick(object sender, RoutedEventArgs e)
         {
             var dataContext = DataContext as ImageSomCompressorDataContext;
-            lattice = new Lattice(dataContext.Width, dataContext.Height, InputDimension, dataContext.NumberOfIterations,
+            _lattice = new Lattice(dataContext.Width, dataContext.Height, InputDimension,
+                dataContext.NumberOfIterations,
                 dataContext.LearningRate);
             dataContext.ProgressBar = 0;
             var input = (DataContext as ImageSomCompressorDataContext).OriginalImage.ToVectors().ToArray();
-            backgroundWorker.RunWorkerAsync(input);
+            _backgroundWorker.RunWorkerAsync(input);
         }
 
         private void PrintImageOnGui(Image image)
@@ -128,7 +129,7 @@ namespace ImageSomCompressor
             var dataContext = DataContext as ImageSomCompressorDataContext;
             var image = dataContext.OriginalImage;
             var input = dataContext.OriginalImage.ToVectors().ToArray();
-            var result = lattice.GenerateResult(input);
+            var result = _lattice.GenerateResult(input);
             var bitmap = MakeBitmap(result, image.Height, image.Width);
             dataContext.ChangedImage = bitmap;
             PrintImageOnGui(bitmap);
