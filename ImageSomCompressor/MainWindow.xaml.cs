@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using ImageSomCompressor.Core.Som.Extensions;
 using ImageSomCompressor.Core.Som.Lattice;
 using ImageSomCompressor.Core.Som.Vector;
@@ -18,6 +20,7 @@ namespace ImageSomCompressor
     {
         private const int InputDimension = 3; //cuz of RGB
         private readonly BackgroundWorker _backgroundWorker;
+        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private ILattice _lattice;
 
         public MainWindow()
@@ -31,8 +34,42 @@ namespace ImageSomCompressor
                 WorkerSupportsCancellation = true
             };
 
-            _backgroundWorker.DoWork += BackgroundWorker_DoWork;
-            _backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
+            _backgroundWorker.DoWork += OnBackgroundWorker_DoWork;
+            _backgroundWorker.ProgressChanged += OnBackgroundWorker_ProgressChanged;
+            _backgroundWorker.RunWorkerCompleted += OnBackgroundWorker_ProgressChanged_Complete;
+
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            _dispatcherTimer.Tick += OnDispatcherTimer_Tick;
+        }
+
+        private void OnBackgroundWorker_ProgressChanged_Complete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var dataContext = DataContext as ImageSomCompressorDataContext;
+            if (e.Cancelled)
+            {
+                //canceled
+            }
+            else if (e.Error != null)
+            {
+                //error
+            }
+            else
+            {
+                dataContext.Stopwatch.Stop();
+                _dispatcherTimer.Stop();
+            }
+        }
+
+        private void OnDispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            var dataContext = DataContext as ImageSomCompressorDataContext;
+            if (!dataContext.Stopwatch.IsRunning)
+            {
+                return;
+            }
+
+            var ts = dataContext.Stopwatch.Elapsed;
+            dataContext.CurrentTime = $"{ts.Minutes:00}:{ts.Seconds:00}";
         }
 
         private void SetStartValues()
@@ -44,7 +81,7 @@ namespace ImageSomCompressor
             dataContext.NumberOfIterations = 30;
         }
 
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void OnBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
 
@@ -70,7 +107,7 @@ namespace ImageSomCompressor
             return bitmap;
         }
 
-        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void OnBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var dataContext = DataContext as ImageSomCompressorDataContext;
             dataContext.ProgressBar = e.ProgressPercentage;
@@ -101,6 +138,8 @@ namespace ImageSomCompressor
                 dataContext.NumberOfIterations,
                 dataContext.LearningRate);
             dataContext.ProgressBar = 0;
+            dataContext.Stopwatch = Stopwatch.StartNew();
+            _dispatcherTimer.Start();
             var input = (DataContext as ImageSomCompressorDataContext).OriginalImage.ToVectors().ToArray();
             _backgroundWorker.RunWorkerAsync(input);
         }

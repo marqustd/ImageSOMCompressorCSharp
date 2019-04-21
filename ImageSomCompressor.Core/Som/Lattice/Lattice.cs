@@ -148,7 +148,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             Parallel.For(0, _width,
                 x =>
                 {
-                    Parallel.For(0, _width,
+                    Parallel.For(0, _height,
                         y => { _lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
                 });
         }

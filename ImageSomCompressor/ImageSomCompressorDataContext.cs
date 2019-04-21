@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
@@ -8,103 +9,124 @@ namespace ImageSomCompressor
 {
     internal class ImageSomCompressorDataContext : INotifyPropertyChanged
     {
-        private Bitmap changedImage;
-        private string currentIteration;
-        private int height;
-        private BitmapImage imageSource;
-        private double learningRate;
-        private int numberOfIterations;
-        private Bitmap originalImage;
-        private double progressBar;
+        private Bitmap _changedImage;
+        private string _currentIteration;
+        private string _currentTime;
+        private int _height;
+        private BitmapImage _imageSource;
+        private double _learningRate;
+        private int _numberOfIterations;
+        private Bitmap _originalImage;
+        private double _progressBar;
+        private Stopwatch _stopwatch;
+        private int _width;
 
-        private int width;
+        public string CurrentTime
+        {
+            get => _currentTime;
+            set
+            {
+                _currentTime = value;
+                OnPropertyChanged(nameof(CurrentTime));
+            }
+        }
+
+        public Stopwatch Stopwatch
+        {
+            get => _stopwatch;
+            set
+            {
+                _stopwatch = value;
+                OnPropertyChanged(nameof(Stopwatch));
+            }
+        }
 
         public string CurrentIteration
         {
-            get => currentIteration;
+            get => _currentIteration;
             set
             {
-                currentIteration = value;
+                _currentIteration = value;
                 OnPropertyChanged(nameof(CurrentIteration));
             }
         }
 
         public int Width
         {
-            get => width;
+            get => _width;
             set
             {
-                width = value;
+                _width = value;
                 OnPropertyChanged(nameof(Width));
             }
         }
 
         public int Height
         {
-            get => height;
+            get => _height;
             set
             {
-                height = value;
+                _height = value;
                 OnPropertyChanged(nameof(Height));
             }
         }
 
         public int NumberOfIterations
         {
-            get => numberOfIterations;
+            get => _numberOfIterations;
             set
             {
-                numberOfIterations = value;
+                _numberOfIterations = value;
                 OnPropertyChanged(nameof(NumberOfIterations));
             }
         }
 
         public double LearningRate
         {
-            get => learningRate;
+            get => _learningRate;
             set
             {
-                learningRate = value;
+                _learningRate = value;
                 OnPropertyChanged(nameof(LearningRate));
             }
         }
 
         public double ProgressBar
         {
-            get => progressBar;
+            get => _progressBar;
             set
             {
-                progressBar = value;
+                _progressBar = value;
                 OnPropertyChanged(nameof(ProgressBar));
             }
         }
 
         public BitmapImage ImageSource
         {
-            get => imageSource;
+            get => _imageSource;
             set
             {
-                imageSource = value;
+                _imageSource = value;
                 OnPropertyChanged(nameof(ImageSource));
             }
         }
 
         public Bitmap OriginalImage
         {
-            get => originalImage;
+            get => _originalImage;
             set
             {
-                originalImage = value;
+                _originalImage = value;
                 OnPropertyChanged(nameof(OriginalImage));
             }
         }
 
         public Bitmap ChangedImage
         {
-            get => changedImage;
+            get => _changedImage;
             set
             {
-                changedImage = value;
+                _changedImage = value;
                 OnPropertyChanged(nameof(OriginalImage));
             }
         }
