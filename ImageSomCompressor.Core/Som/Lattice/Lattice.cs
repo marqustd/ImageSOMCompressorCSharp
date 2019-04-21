@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using ImageSomCompressor.Core.Som.Neuron;
 using ImageSomCompressor.Core.Som.Vector;
 
@@ -66,6 +67,16 @@ namespace ImageSomCompressor.Core.Som.Lattice
                 iteration++;
                 learningRate = learningRate * Math.Exp(-(double) iteration / numberOfIterations);
             }
+        }
+
+        public IEnumerable<IVector> GenerateResult(IVector[] input)
+        {
+            return input.Select(CalculateBmu).Select(node => new Vector.Vector
+            {
+                node.R,
+                node.G,
+                node.B
+            });
         }
 
         internal (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)

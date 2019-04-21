@@ -25,6 +25,74 @@
         <StackPanel>
             <Button Click="OnBtnLoadClick">Load Image</Button>
             <Button Click="OnBtnTrainClick">Train</Button>
+            <Button Click="OnBtnCompressClick">Compress</Button>
+
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Lattice width:</Label>
+                <Label Margin="5" Grid.Column="1" Content="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <Slider
+                Orientation="Horizontal"
+                Minimum="1"
+                TickFrequency="1"
+                IsSnapToTickEnabled="True"
+                Maximum="16"
+                Value="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Lattice height:</Label>
+                <Label Margin="5" Grid.Column="1" Content="{Binding Path=Height, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <Slider
+                Orientation="Horizontal"
+                Minimum="1"
+                TickFrequency="1"
+                IsSnapToTickEnabled="True"
+                Maximum="16"
+                Value="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Number of iterations:</Label>
+                <Label Margin="5" Grid.Column="1"
+                       Content="{Binding Path=NumberOfIterations, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <Slider
+                Orientation="Horizontal"
+                Minimum="1"
+                TickFrequency="1"
+                IsSnapToTickEnabled="True"
+                Maximum="255"
+                Value="{Binding Path=NumberOfIterations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Learning rate:</Label>
+                <Label Margin="5" Grid.Column="1"
+                       Content="{Binding Path=LearningRate, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <Slider
+                Orientation="Horizontal"
+                Minimum="0.01"
+                TickFrequency="0.01"
+                IsSnapToTickEnabled="True"
+                Maximum="1"
+                Value="{Binding Path=LearningRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
         </StackPanel>
 
         <ProgressBar Grid.Row="1" Value="{Binding Path=ProgressBar, UpdateSourceTrigger=PropertyChanged}" />

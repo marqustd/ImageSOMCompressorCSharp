@@ -18,6 +18,9 @@ namespace ImageSomCompressor.Core.Som.Neuron
 
         public int X { get; set; }
         public int Y { get; set; }
+        public int R { get; private set; }
+        public int G { get; private set; }
+        public int B { get; private set; }
         public IVector Weights { get; }
 
         public void SetWeight(int index, double value)
@@ -42,7 +45,7 @@ namespace ImageSomCompressor.Core.Som.Neuron
 
         public void UpdateWeights(IVector input, double distanceDecay, double learningRate)
         {
-            if (input.Count != Weights.Count)
+            if (input.Count != Weights.Count && input.Count != 3)
             {
                 throw new ArgumentException("Wrong input!");
             }
@@ -51,6 +54,10 @@ namespace ImageSomCompressor.Core.Som.Neuron
             {
                 Weights[i] += distanceDecay * learningRate * (input[i] - Weights[i]);
             }
+
+            R = (int) ((R + input[0]) / 2);
+            G = (int) ((R + input[1]) / 2);
+            B = (int) ((R + input[2]) / 2);
         }
 
         public double Distance(INeuron neuron)

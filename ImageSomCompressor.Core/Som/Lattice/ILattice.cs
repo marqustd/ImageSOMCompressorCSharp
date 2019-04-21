@@ -4,8 +4,9 @@ using ImageSomCompressor.Core.Som.Vector;
 
 namespace ImageSomCompressor.Core.Som.Lattice
 {
-    internal interface ILattice
+    public interface ILattice
     {
         void Train(IEnumerable<IVector> input, BackgroundWorker worker);
+        IEnumerable<IVector> GenerateResult(IVector[] input);
     }
 }

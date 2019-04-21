@@ -15,7 +15,7 @@ namespace ImageSomCompressor.Core.Som.Vector
             var distance = 0.0d;
             for (var i = 0; i < Count; i++)
             {
-                distance += (this[i] + vector[i]) * (this[i] + vector[i]);
+                distance += (this[i] - vector[i]) * (this[i] - vector[i]);
             }
 
             return distance;

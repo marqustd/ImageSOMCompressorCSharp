@@ -6,6 +6,9 @@ namespace ImageSomCompressor.Core.Som.Neuron
     {
         int X { get; set; }
         int Y { get; set; }
+        int R { get; }
+        int G { get; }
+        int B { get; }
         IVector Weights { get; }
 
         double Distance(INeuron neuron);
