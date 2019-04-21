@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+using Hybridizer.Runtime.CUDAImports;
 using ImageSomCompressor.Core.Som.Models;
 
-namespace ImageSomCompressor.Core.Som.Lattice
+namespace ImageSomCompressor.Core.SomCUDA.LatticeCUDA
 {
-    public class Lattice : ILattice
+    public class LatticeCUDA
     {
+        private const int Count = 3;
         private readonly int _height;
-        private readonly Neuron.Neuron[,] _lattice;
+        private readonly NeuronCUDA.NeuronCUDA[,] _lattice;
         private readonly double _matrixRadius;
         private readonly int _numberOfIterations;
         private readonly double _timeConstant;
@@ -16,11 +17,11 @@ namespace ImageSomCompressor.Core.Som.Lattice
         private int _iteration;
         private double _learningRate;
 
-        public Lattice(int width, int height, int inputDimension, int numberOfIterations, double learningRate)
+        public LatticeCUDA(int width, int height, int inputDimension, int numberOfIterations, double learningRate)
         {
             _width = width;
             _height = height;
-            _lattice = new Neuron.Neuron[width, height];
+            _lattice = new NeuronCUDA.NeuronCUDA[width, height];
             _numberOfIterations = numberOfIterations;
             _learningRate = learningRate;
             _iteration = 0;
@@ -28,19 +29,20 @@ namespace ImageSomCompressor.Core.Som.Lattice
             _matrixRadius = Math.Max(width, height) / 2;
             _timeConstant = numberOfIterations / Math.Log(_matrixRadius);
 
-            InitializeConnections(inputDimension);
+            //InitializeConnections(inputDimension);
         }
 
-        public void Train(Vector.Vector[] input, int count)
+        [EntryPoint]
+        public void Train(VectorCUDA.VectorCUDA[] input, int count)
         {
             while (_iteration < _numberOfIterations)
             {
                 var currentRadius = CalculateNeighborhoodRadius(_iteration);
 
-                Parallel.For(0, count, i =>
+                for(var i =0; i <count; i++)
                 {
                     var currentInput = input[i];
-                    var bmu = CalculateBmu(currentInput);
+                    var bmu = CalculateBmu(currentInput, Count);
 
                     var radiusIndexes = GetRadiusIndexes(bmu, currentRadius);
 
@@ -53,11 +55,11 @@ namespace ImageSomCompressor.Core.Som.Lattice
                             if (distance <= Math.Pow(currentRadius, 2.0))
                             {
                                 var distanceDrop = GetDistanceDrop(distance, currentRadius);
-                                processingNeuron.UpdateWeights(currentInput, _learningRate, distanceDrop);
+                                processingNeuron.UpdateWeights(currentInput.Inputs, 3, _learningRate, distanceDrop);
                             }
                         }
                     }
-                });
+                }
 
                 //worker.ReportProgress((int) (iteration / (float) numberOfIterations * 100));
                 _iteration++;
@@ -67,17 +69,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             //worker.ReportProgress(100);
         }
 
-        public Vector.Vector[] GenerateResult(Vector.Vector[] input)
-        {
-            return input.Select(CalculateBmu).Select(node => new Vector.Vector
-            {
-                node.R,
-                node.G,
-                node.B
-            }).ToArray();
-        }
-
-        internal RadiusIndexes GetRadiusIndexes(Neuron.Neuron bmu, double currentRadius)
+        private RadiusIndexes GetRadiusIndexes(NeuronCUDA.NeuronCUDA bmu, double currentRadius)
         {
             var xStart = (int) (bmu.X - currentRadius - 1);
             xStart = xStart < 0 ? 0 : xStart;
@@ -100,13 +92,8 @@ namespace ImageSomCompressor.Core.Som.Lattice
             return new RadiusIndexes(xStart, xEnd, yStart, yEnd);
         }
 
-        private Neuron.Neuron GetNeuron(int indexX, int indexY)
+        private NeuronCUDA.NeuronCUDA GetNeuron(int indexX, int indexY)
         {
-            if (indexX > _width || indexY > _height)
-            {
-                throw new ArgumentException("Wrong index!");
-            }
-
             return _lattice[indexX, indexY];
         }
 
@@ -120,35 +107,36 @@ namespace ImageSomCompressor.Core.Som.Lattice
             return Math.Exp(-(Math.Pow(distance, 2.0) / Math.Pow(radius, 2.0)));
         }
 
-        private Neuron.Neuron CalculateBmu(Vector.Vector input)
+        private NeuronCUDA.NeuronCUDA CalculateBmu(VectorCUDA.VectorCUDA input, int inputSize)
         {
             var bmu = _lattice[0, 0];
-            var bestDist = input.EuclideanDistance(bmu.Weights);
+            var bestDist = input.EuclideanDistance(bmu.Weights, bmu.Count);
 
-            for (var i = 0; i < _width; i++)
+            Parallel.For(0, _width, x =>
             {
-                for (var j = 0; j < _height; j++)
+                for (int y = 0; y < _height; y++)
                 {
-                    var distance = input.EuclideanDistance(_lattice[i, j].Weights);
+                    var distance = input.EuclideanDistance(_lattice[x, y].Weights, _lattice[x, y].Count);
                     if (distance < bestDist)
                     {
-                        bmu = _lattice[i, j];
+                        bmu = _lattice[x, y];
                         bestDist = distance;
                     }
                 }
-            }
+            });
 
             return bmu;
         }
 
-        private void InitializeConnections(int inputDimension)
-        {
-            Parallel.For(0, _width,
-                x =>
-                {
-                    Parallel.For(0, _width,
-                        y => { _lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
-                });
-        }
+        //[Kernel]
+        //private void InitializeConnections(int inputDimension)
+        //{
+        //    Parallel.For(0, _width,
+        //        x =>
+        //        {
+        //            Parallel.For(0, _height,
+        //                y => { _lattice[x, y] = new NeuronCUDA.NeuronCUDA(inputDimension) {X = x, Y = y}; });
+        //        });
+        //}
     }
 }

@@ -55,6 +55,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -73,6 +74,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs" />
+    <Compile Include="Core\SomCUDA\NeuronCUDA\NeuronCUDA.cs" />
+    <Compile Include="Core\SomCUDA\VectorCUDA\VectorCUDA.cs" />
+    <Compile Include="Core\Som\Models\RadiusIndexes.cs" />
     <Compile Include="Extensions\BitmapExtensions.cs" />
     <Compile Include="Core\Som\Lattice\ILattice.cs" />
     <Compile Include="Core\Som\Lattice\Lattice.cs" />
@@ -121,5 +126,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

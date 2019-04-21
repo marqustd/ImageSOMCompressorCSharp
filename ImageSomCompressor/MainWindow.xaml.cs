@@ -7,9 +7,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using Hybridizer.Runtime.CUDAImports;
 using ImageSomCompressor.Core.Som.Extensions;
 using ImageSomCompressor.Core.Som.Lattice;
 using ImageSomCompressor.Core.Som.Vector;
+using ImageSomCompressor.Core.SomCUDA.LatticeCUDA;
 
 namespace ImageSomCompressor
 {
@@ -48,8 +50,17 @@ namespace ImageSomCompressor
             var worker = sender as BackgroundWorker;
 
             var input = (IVector[]) e.Argument;
+            var count = input.Length;
+            cudaDeviceProp prop;
+            cuda.GetDeviceProperties(out prop, 0);
+            //if .SetDistrib is not used, the default is .SetDistrib(prop.multiProcessorCount * 16, 128)
+            var runner = HybRunner.Cuda();
 
-            lattice.Train(input, worker);
+            // create a wrapper object to call GPU methods instead of C#
+            var latticeCuda = new LatticeCUDA(5, 5, 3, 40, 0.5);
+            var wrappedLattice = runner.Wrap(latticeCuda);
+
+            wrappedLattice.Train(input, count);
         }
 
         private Bitmap MakeBitmap(IVector[] input, int height, int width)

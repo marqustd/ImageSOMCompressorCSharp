@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using ImageSomCompressor.Core.Som.Vector;
 
 namespace ImageSomCompressor.Core.Som.Extensions
 {
     public static class BitmapExtensions
     {
-        public static IEnumerable<IVector> ToVectors(this Bitmap bitmap)
+        public static IEnumerable<Vector.Vector> ToVectors(this Bitmap bitmap)
         {
             for (var y = 0; y < bitmap.Height; y++)
             {

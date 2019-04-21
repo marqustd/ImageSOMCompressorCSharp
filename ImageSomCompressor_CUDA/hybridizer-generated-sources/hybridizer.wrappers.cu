@@ -60,3 +60,332 @@ namespace hybridizer { struct hybridobject ; }
 namespace hybridizer { struct runtime ; }
 
 #pragma region defined enums and types
+#if defined(__cplusplus) || defined(__CUDACC__)
+namespace ImageSomCompressor { namespace Core { namespace SomCUDA { namespace NeuronCUDA { 
+struct NeuronCUDA ;
+} } } } // Leaving namespace
+namespace ImageSomCompressor { namespace Core { namespace SomCUDA { namespace LatticeCUDA { 
+struct LatticeCUDA ;
+} } } } // Leaving namespace
+namespace ImageSomCompressor { namespace Core { namespace SomCUDA { namespace VectorCUDA { 
+struct VectorCUDA ;
+} } } } // Leaving namespace
+namespace ImageSomCompressor { namespace Core { namespace SomCUDA { namespace VectorCUDA { 
+struct VectorCUDA___c__DisplayClass8_0 ;
+} } } } // Leaving namespace
+namespace ImageSomCompressor { namespace Core { namespace SomCUDA { namespace LatticeCUDA { 
+struct LatticeCUDA___c__DisplayClass15_0 ;
+} } } } // Leaving namespace
+namespace ImageSomCompressor { namespace Core { namespace Som { namespace Models { 
+struct RadiusIndexes ;
+} } } } // Leaving namespace
+namespace System { 
+struct Math ;
+} // Leaving namespace
+namespace System { namespace Threading { namespace Tasks { 
+struct Parallel ;
+} } } // Leaving namespace
+// Intrinsic type Nullable`1 used
+#define __TYPE_DECL_hybridizer_nullable__int64_t____
+namespace System { namespace Threading { namespace Tasks { 
+struct ParallelLoopResult ;
+} } } // Leaving namespace
+// Intrinsic type Action`1 used
+#define __TYPE_DECL_hybridizer_action__int____
+#endif
+#pragma endregion
+
+extern "C" void* __hybridizer_init_basic_runtime();
+#include <cstdio>
+// generating GetTypeID function
+#include <cstring> // for strcmp
+extern "C" DLL_PUBLIC int HybridizerGetTypeID( const char* fullTypeName)
+{
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.Som.Models.RadiusIndexes") == 0) return 1000000 ; 
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA") == 0) return 1000001 ; 
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA+<>c__DisplayClass15_0") == 0) return 1000002 ; 
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.NeuronCUDA.NeuronCUDA") == 0) return 1000003 ; 
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA") == 0) return 1000004 ; 
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA+<>c__DisplayClass8_0") == 0) return 1000005 ; 
+	if (strcmp (fullTypeName, "System.Action<System.Int32>") == 0) return 1000006 ; 
+	if (strcmp (fullTypeName, "System.Math") == 0) return 1000007 ; 
+	if (strcmp (fullTypeName, "System.Nullable<System.Int64>") == 0) return 1000008 ; 
+	if (strcmp (fullTypeName, "System.Object") == 0) return 1000009 ; 
+	if (strcmp (fullTypeName, "System.Threading.Tasks.Parallel") == 0) return 1000010 ; 
+	if (strcmp (fullTypeName, "System.Threading.Tasks.ParallelLoopResult") == 0) return 1000011 ; 
+	return 0 ;
+}
+extern "C" DLL_PUBLIC const char* HybridizerGetTypeFromID( const int typeId)
+{
+	if (typeId == 1000000) return "ImageSomCompressor.Core.Som.Models.RadiusIndexes" ; 
+	if (typeId == 1000001) return "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA" ; 
+	if (typeId == 1000002) return "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA+<>c__DisplayClass15_0" ; 
+	if (typeId == 1000003) return "ImageSomCompressor.Core.SomCUDA.NeuronCUDA.NeuronCUDA" ; 
+	if (typeId == 1000004) return "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA" ; 
+	if (typeId == 1000005) return "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA+<>c__DisplayClass8_0" ; 
+	if (typeId == 1000006) return "System.Action<System.Int32>" ; 
+	if (typeId == 1000007) return "System.Math" ; 
+	if (typeId == 1000008) return "System.Nullable<System.Int64>" ; 
+	if (typeId == 1000009) return "System.Object" ; 
+	if (typeId == 1000010) return "System.Threading.Tasks.Parallel" ; 
+	if (typeId == 1000011) return "System.Threading.Tasks.ParallelLoopResult" ; 
+	return "" ;
+}
+extern "C" DLL_PUBLIC int HybridizerGetShallowSize (const char* fullTypeName) 
+{
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_Som_Models_RadiusIndexes__
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.Som.Models.RadiusIndexes") == 0) return 16 ; 
+	#endif
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_SomCUDA_LatticeCUDA_LatticeCUDA___
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA") == 0) return 56 ; 
+	#endif
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_SomCUDA_LatticeCUDA_LatticeCUDA___c__DisplayClass15_0__
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.LatticeCUDA.LatticeCUDA+<>c__DisplayClass15_0") == 0) return 40 ; 
+	#endif
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_SomCUDA_NeuronCUDA_NeuronCUDA___
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.NeuronCUDA.NeuronCUDA") == 0) return 40 ; 
+	#endif
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_SomCUDA_VectorCUDA_VectorCUDA___
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA") == 0) return 24 ; 
+	#endif
+	#ifdef __TYPE_DECL__ImageSomCompressor_Core_SomCUDA_VectorCUDA_VectorCUDA___c__DisplayClass8_0__
+	if (strcmp (fullTypeName, "ImageSomCompressor.Core.SomCUDA.VectorCUDA.VectorCUDA+<>c__DisplayClass8_0") == 0) return 32 ; 
+	#endif
+	#ifdef __TYPE_DECL_hybridizer_action__T____
+	if (strcmp (fullTypeName, "System.Action<System.Int32>") == 0) return 24 ; 
+	#endif
+	#ifdef __TYPE_DECL_hybridizer_nullable__T____
+	if (strcmp (fullTypeName, "System.Nullable<System.Int64>") == 0) return 16 ; 
+	#endif
+	#ifdef __TYPE_DECL_hybridizer_hybridobject___
+	if (strcmp (fullTypeName, "System.Object") == 0) return 8 ; 
+	#endif
+	#ifdef __TYPE_DECL__System_Threading_Tasks_ParallelLoopResult__
+	if (strcmp (fullTypeName, "System.Threading.Tasks.ParallelLoopResult") == 0) return 24 ; 
+	#endif
+	return 0 ;
+}
+
+// Get various Hybridizer properties at runtime
+struct __hybridizer_properties {
+    int32_t UseHybridArrays;
+    int32_t Flavor;
+    int32_t CompatibilityMode;
+    int32_t _dummy;
+};
+extern "C" DLL_PUBLIC __hybridizer_properties __HybridizerGetProperties () {
+    __hybridizer_properties res;
+    res.UseHybridArrays = 0;
+    res.Flavor = 1;
+    res.CompatibilityMode = 0;
+    return res ;
+}
+#include <cuda.h>                                     
+ struct HybridModule                                  
+ {                                                    
+     void* module_data ;                              
+     CUmodule module ;                                
+ } ;                                                  
+                                                      
+ extern char __hybridizer_cubin_module_data [] ;      
+ static HybridModule __hybridizer__gs_module = { 0 }; 
+ static int __hybridizer_initialized = 0; 
+
+
+// error code translation from CUresult to cudaError_t
+
+namespace hybridizer {
+
+	cudaError_t translateCUresult(int cures)
+	{
+		switch (cures)
+
+		{
+			case CUDA_SUCCESS: return cudaSuccess ;
+			case CUDA_ERROR_INVALID_VALUE: return cudaErrorInvalidValue ;
+			case CUDA_ERROR_LAUNCH_FAILED: return cudaErrorLaunchFailure ;
+			case CUDA_ERROR_NOT_SUPPORTED: return cudaErrorNotSupported ;
+			case CUDA_ERROR_ILLEGAL_INSTRUCTION : return cudaErrorLaunchFailure ;
+			default: return cudaErrorUnknown ;
+		}
+	}
+
+} // namespace hybridizer
+#pragma region Wrappers definitions
+
+
+extern "C" DLL_PUBLIC int ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train_ExternCWrapper_CUDA( int gridDim_x,  int gridDim_y,  int blockDim_x,  int blockDim_y,  int blockDim_z,  int shared,  ImageSomCompressor::Core::SomCUDA::LatticeCUDA::LatticeCUDA* const __hybridizer_pself,  ImageSomCompressor::Core::SomCUDA::VectorCUDA::VectorCUDA** const input,  int count)
+{
+	if (0 == __hybridizer_initialized) {                                                            
+		cudaDeviceSynchronize();                                                                       
+		__hybridizer_initialized = 1;                                                                  
+	}                                                                                               
+	CUresult cures ;                                                                                 
+	if (__hybridizer__gs_module.module_data == 0)                                                    
+	{                                                                                              
+		cures = cuModuleLoadData (&(__hybridizer__gs_module.module), __hybridizer_cubin_module_data) ; 
+		__hybridizer__gs_module.module_data = (void*) __hybridizer_cubin_module_data ;                 
+		if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                  
+	}                                                                                              
+	                                                                                                 
+	CUfunction __hybridizer__cufunc ;                                                                
+	                                                                                                 
+	cures = cuModuleGetFunction (&__hybridizer__cufunc, __hybridizer__gs_module.module, "ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train") ;   
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                    
+	                                                                                                 
+	hybridizer::runtime* __hybridizer_runtime = (hybridizer::runtime*) __hybridizer_init_basic_runtime(); 
+
+
+
+	void* __hybridizer_launch_config[5] = 
+		{
+			(void*)&__hybridizer_runtime,
+			(void*)&__hybridizer_pself,
+			(void*)&input,
+			(void*)&count,
+			(void*)0
+		} ;
+
+	shared += 16 ; if (shared > 48*1024) shared = 48*1024 ;                                                                                                
+	                                                                                                                                                       
+	cures = cuLaunchKernel (__hybridizer__cufunc, gridDim_x, gridDim_y, 1, blockDim_x, blockDim_y, blockDim_z, shared, 0, __hybridizer_launch_config, 0) ; 
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ; 
+	int cudaLaunchRes = (int)::cudaPeekAtLastError ();         
+	if (cudaLaunchRes != 0) return cudaLaunchRes;            
+	int __synchronizeRes = (int)::cudaDeviceSynchronize () ; 
+	return __synchronizeRes ;                                
+
+}
+
+extern "C" DLL_PUBLIC int ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train_ExternCWrapperStream_CUDA( int gridDim_x,  int gridDim_y,  int blockDim_x,  int blockDim_y,  int blockDim_z,  int shared,  cudaStream_t st,  ImageSomCompressor::Core::SomCUDA::LatticeCUDA::LatticeCUDA* const __hybridizer_pself,  ImageSomCompressor::Core::SomCUDA::VectorCUDA::VectorCUDA** const input,  int count)
+{
+	if (0 == __hybridizer_initialized) {                                                            
+		cudaDeviceSynchronize();                                                                       
+		__hybridizer_initialized = 1;                                                                  
+	}                                                                                               
+	CUresult cures ;                                                                                 
+	if (__hybridizer__gs_module.module_data == 0)                                                    
+	{                                                                                              
+		cures = cuModuleLoadData (&(__hybridizer__gs_module.module), __hybridizer_cubin_module_data) ; 
+		__hybridizer__gs_module.module_data = (void*) __hybridizer_cubin_module_data ;                 
+		if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                  
+	}                                                                                              
+	                                                                                                 
+	CUfunction __hybridizer__cufunc ;                                                                
+	                                                                                                 
+	cures = cuModuleGetFunction (&__hybridizer__cufunc, __hybridizer__gs_module.module, "ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train") ;   
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                    
+	                                                                                                 
+	hybridizer::runtime* __hybridizer_runtime = (hybridizer::runtime*) __hybridizer_init_basic_runtime(); 
+
+
+
+	void* __hybridizer_launch_config[6] = 
+		{
+			(void*)&__hybridizer_runtime,
+			(void*)&__hybridizer_pself,
+			(void*)&input,
+			(void*)&count,
+			(void*)0
+		} ;
+
+	shared += 16 ; if (shared > 48*1024) shared = 48*1024 ;                                                                                                
+	                                                                                                                                                       
+	cures = cuLaunchKernel (__hybridizer__cufunc, gridDim_x, gridDim_y, 1, blockDim_x, blockDim_y, blockDim_z, shared, st, __hybridizer_launch_config, 0) ; 
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ; 
+	int cudaLaunchRes = (int)::cudaPeekAtLastError ();         
+	if (cudaLaunchRes != 0) return cudaLaunchRes;            
+	return cudaLaunchRes; 
+
+}
+
+#if CUDART_VERSION >= 9000
+extern "C" DLL_PUBLIC int ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train_ExternCWrapperGridSync_CUDA( int gridDim_x,  int gridDim_y,  int blockDim_x,  int blockDim_y,  int blockDim_z,  int shared,  ImageSomCompressor::Core::SomCUDA::LatticeCUDA::LatticeCUDA* const __hybridizer_pself,  ImageSomCompressor::Core::SomCUDA::VectorCUDA::VectorCUDA** const input,  int count)
+{
+	if (0 == __hybridizer_initialized) {                                                            
+		cudaDeviceSynchronize();                                                                       
+		__hybridizer_initialized = 1;                                                                  
+	}                                                                                               
+	CUresult cures ;                                                                                 
+	if (__hybridizer__gs_module.module_data == 0)                                                    
+	{                                                                                              
+		cures = cuModuleLoadData (&(__hybridizer__gs_module.module), __hybridizer_cubin_module_data) ; 
+		__hybridizer__gs_module.module_data = (void*) __hybridizer_cubin_module_data ;                 
+		if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                  
+	}                                                                                              
+	                                                                                                 
+	CUfunction __hybridizer__cufunc ;                                                                
+	                                                                                                 
+	cures = cuModuleGetFunction (&__hybridizer__cufunc, __hybridizer__gs_module.module, "ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train") ;   
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                    
+	                                                                                                 
+	hybridizer::runtime* __hybridizer_runtime = (hybridizer::runtime*) __hybridizer_init_basic_runtime(); 
+
+
+
+	void* __hybridizer_launch_config[5] = 
+		{
+			(void*)&__hybridizer_runtime,
+			(void*)&__hybridizer_pself,
+			(void*)&input,
+			(void*)&count,
+			(void*)0
+		} ;
+
+	shared += 16 ; if (shared > 48*1024) shared = 48*1024 ;                                                                                                
+	                                                                                                                                                       
+	cures = cuLaunchCooperativeKernel (__hybridizer__cufunc, gridDim_x, gridDim_y, 1, blockDim_x, blockDim_y, blockDim_z, shared, 0, __hybridizer_launch_config) ; 
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ; 
+	int cudaLaunchRes = (int)::cudaPeekAtLastError ();         
+	if (cudaLaunchRes != 0) return cudaLaunchRes;            
+	int __synchronizeRes = (int)::cudaDeviceSynchronize () ; 
+	return __synchronizeRes ;                                
+
+}
+#endif
+
+#if CUDART_VERSION >= 9000
+extern "C" DLL_PUBLIC int ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train_ExternCWrapperStreamGridSync_CUDA( int gridDim_x,  int gridDim_y,  int blockDim_x,  int blockDim_y,  int blockDim_z,  int shared,  cudaStream_t st,  ImageSomCompressor::Core::SomCUDA::LatticeCUDA::LatticeCUDA* const __hybridizer_pself,  ImageSomCompressor::Core::SomCUDA::VectorCUDA::VectorCUDA** const input,  int count)
+{
+	if (0 == __hybridizer_initialized) {                                                            
+		cudaDeviceSynchronize();                                                                       
+		__hybridizer_initialized = 1;                                                                  
+	}                                                                                               
+	CUresult cures ;                                                                                 
+	if (__hybridizer__gs_module.module_data == 0)                                                    
+	{                                                                                              
+		cures = cuModuleLoadData (&(__hybridizer__gs_module.module), __hybridizer_cubin_module_data) ; 
+		__hybridizer__gs_module.module_data = (void*) __hybridizer_cubin_module_data ;                 
+		if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                  
+	}                                                                                              
+	                                                                                                 
+	CUfunction __hybridizer__cufunc ;                                                                
+	                                                                                                 
+	cures = cuModuleGetFunction (&__hybridizer__cufunc, __hybridizer__gs_module.module, "ImageSomCompressorx46Corex46SomCUDAx46LatticeCUDAx46LatticeCUDAx46Train") ;   
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ;                    
+	                                                                                                 
+	hybridizer::runtime* __hybridizer_runtime = (hybridizer::runtime*) __hybridizer_init_basic_runtime(); 
+
+
+
+	void* __hybridizer_launch_config[6] = 
+		{
+			(void*)&__hybridizer_runtime,
+			(void*)&__hybridizer_pself,
+			(void*)&input,
+			(void*)&count,
+			(void*)0
+		} ;
+
+	shared += 16 ; if (shared > 48*1024) shared = 48*1024 ;                                                                                                
+	                                                                                                                                                       
+	cures = cuLaunchCooperativeKernel (__hybridizer__cufunc, gridDim_x, gridDim_y, 1, blockDim_x, blockDim_y, blockDim_z, shared, st, __hybridizer_launch_config) ; 
+	if (cures != CUDA_SUCCESS) return hybridizer::translateCUresult((int)cures) ; 
+	int cudaLaunchRes = (int)::cudaPeekAtLastError ();         
+	if (cudaLaunchRes != 0) return cudaLaunchRes;            
+	return cudaLaunchRes; 
+
+}
+#endif
+
+#pragma endregion

@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-using ImageSomCompressor.Core.Som.Vector;
-
-namespace ImageSomCompressor.Core.Som.Lattice
+﻿namespace ImageSomCompressor.Core.Som.Lattice
 {
     public interface ILattice
     {
-        void Train(IVector[] input, BackgroundWorker worker);
-        IVector[] GenerateResult(IVector[] input);
+        void Train(Vector.Vector[] input, int count);
+        Vector.Vector[] GenerateResult(Vector.Vector[] input);
     }
 }

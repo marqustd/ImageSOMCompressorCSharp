@@ -1,0 +1,13 @@
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(113): error: no instance of overloaded function "hybridizer::hybget" matches the argument list
+            argument types are: (ImageSomCompressor::Core::SomCUDA::NeuronCUDA::NeuronCUDA **, int, int)
+hybridizer.cuda.cuh(1559): warning: a value of type "void (*)(void *, int)" cannot be used to initialize an entity of type "void *"
+          detected during instantiation of "hybridizer::action<T...>::action(void *, void *, __nv_bool) [with T=<int>]" 
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(115): here
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(120): error: no instance of overloaded function "hybridizer::hybget" matches the argument list
+            argument types are: (ImageSomCompressor::Core::SomCUDA::NeuronCUDA::NeuronCUDA **, int, int)
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(120): error: no instance of overloaded function "hybridizer::hybget" matches the argument list
+            argument types are: (ImageSomCompressor::Core::SomCUDA::NeuronCUDA::NeuronCUDA **, int, int)
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(123): error: no instance of overloaded function "hybridizer::hybget" matches the argument list
+            argument types are: (ImageSomCompressor::Core::SomCUDA::NeuronCUDA::NeuronCUDA **, int, int)
+D:\Git\ImageSOMCompressorCSharp\ImageSomCompressor\Core\SomCUDA\LatticeCUDA\LatticeCUDA.cs(97): error: no instance of overloaded function "hybridizer::hybget" matches the argument list
+            argument types are: (ImageSomCompressor::Core::SomCUDA::NeuronCUDA::NeuronCUDA **, int, int)
