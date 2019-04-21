@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ImageSomCompressor.Core.Som.Neuron;
 using ImageSomCompressor.Core.Som.Vector;
 
@@ -39,7 +40,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             {
                 var currentRadius = CalculateNeighborhoodRadius(iteration);
 
-                foreach (var currentInput in input)
+                Parallel.ForEach(input, currentInput =>
                 {
                     var bmu = CalculateBmu(currentInput);
 
@@ -58,7 +59,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
                             }
                         }
                     }
-                }
+                });
 
                 var percentComplete =
                     (int) (iteration / (float) numberOfIterations * 100);
