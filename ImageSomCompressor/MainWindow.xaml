@@ -93,6 +93,9 @@
                 Maximum="1"
                 Value="{Binding Path=LearningRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
+            <Button Click="OnBtnSaveImageClick">Save Image</Button>
+
+
         </StackPanel>
 
         <ProgressBar Grid.Row="1" Value="{Binding Path=ProgressBar, UpdateSourceTrigger=PropertyChanged}" />

@@ -14,9 +14,6 @@ using ImageSomCompressor.Core.Som.Vector;
 
 namespace ImageSomCompressor
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private const int InputDimension = 3; //cuz of RGB
@@ -73,13 +70,13 @@ namespace ImageSomCompressor
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "1.JPeg Image|*.jpg|2.Bitmap Image|*.bmp",
+                Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
                 Title = "Please select an image file."
             };
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var bitmap = new Bitmap(openFileDialog.FileName);
-                (DataContext as ImageSomCompressorDataContext).Image = bitmap;
+                (DataContext as ImageSomCompressorDataContext).OriginalImage = bitmap;
                 PrintImageOnGui(bitmap);
             }
         }
@@ -90,7 +87,7 @@ namespace ImageSomCompressor
             lattice = new Lattice(dataContext.Width, dataContext.Height, InputDimension, dataContext.NumberOfIterations,
                 dataContext.LearningRate);
             dataContext.ProgressBar = 0;
-            var input = (DataContext as ImageSomCompressorDataContext).Image.ToVectors().ToArray();
+            var input = (DataContext as ImageSomCompressorDataContext).OriginalImage.ToVectors().ToArray();
             backgroundWorker.RunWorkerAsync(input);
         }
 
@@ -115,12 +112,39 @@ namespace ImageSomCompressor
 
         private void OnBtnCompressClick(object sender, RoutedEventArgs e)
         {
-            var image = (DataContext as ImageSomCompressorDataContext).Image;
-            var input = (DataContext as ImageSomCompressorDataContext).Image.ToVectors().ToArray();
+            var dataContext = (DataContext as ImageSomCompressorDataContext);
+            var image = dataContext.OriginalImage;
+            var input = dataContext.OriginalImage.ToVectors().ToArray();
             var result = lattice.GenerateResult(input);
             var bitmap = MakeBitmap(result, image.Height, image.Width);
-            (DataContext as ImageSomCompressorDataContext).Image = bitmap;
+            dataContext.ChangedImage = bitmap;
             PrintImageOnGui(bitmap);
+        }
+
+        private void OnBtnSaveImageClick(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog()
+            {
+                Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
+                Title = "Please select an image file.",
+                FileName = "Result"
+            };
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var bitmap = (DataContext as ImageSomCompressorDataContext).ChangedImage;
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        bitmap.Save(saveFileDialog.FileName,ImageFormat.Jpeg);
+                        break;
+                    case 2:
+                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);
+                        break;
+                    case 3:
+                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Bmp);
+                        break;
+                }
+            }
         }
     }
 }
