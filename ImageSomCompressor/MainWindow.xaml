@@ -24,8 +24,14 @@
 
         <StackPanel>
             <Button Click="OnBtnLoadClick">Load Image</Button>
-            <Button Click="OnBtnTrainClick">Train</Button>
-            <Button Click="OnBtnCompressClick">Compress</Button>
+            <Button Click="OnBtnTrainClick"
+                    IsEnabled="{Binding Path=IsProcessingEnable, UpdateSourceTrigger=PropertyChanged}">
+                Train
+            </Button>
+            <Button Click="OnBtnCompressClick"
+                    IsEnabled="{Binding Path=IsProcessingEnable, UpdateSourceTrigger=PropertyChanged}">
+                Compress
+            </Button>
 
             <Grid Margin="0 10 0 0">
                 <Grid.ColumnDefinitions>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -18,7 +17,7 @@ namespace ImageSomCompressor
 {
     public partial class MainWindow : Window
     {
-        private const int InputDimension = 3; //cuz of RGB
+        private const int INPUT_DIMENSION = 3; //cuz of RGB
         private readonly BackgroundWorker _backgroundWorker;
         private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private ILattice _lattice;
@@ -27,7 +26,7 @@ namespace ImageSomCompressor
         {
             InitializeComponent();
             DataContext = new ImageSomCompressorDataContext();
-            _lattice = new Lattice(3, 3, InputDimension, 100, 0.5);
+            _lattice = new Lattice(3, 3, INPUT_DIMENSION, 100, 0.5);
             _backgroundWorker = new BackgroundWorker
             {
                 WorkerReportsProgress = true,
@@ -38,7 +37,7 @@ namespace ImageSomCompressor
             _backgroundWorker.ProgressChanged += OnBackgroundWorker_ProgressChanged;
             _backgroundWorker.RunWorkerCompleted += OnBackgroundWorker_ProgressChanged_Complete;
 
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1);
             _dispatcherTimer.Tick += OnDispatcherTimer_Tick;
         }
 
@@ -100,6 +99,7 @@ namespace ImageSomCompressor
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
         {
+            var dataContext = DataContext as ImageSomCompressorDataContext;
             SetStartValues();
             var openFileDialog = new OpenFileDialog
             {
@@ -108,16 +108,18 @@ namespace ImageSomCompressor
             };
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                dataContext.IsProcessingEnable = false;
                 var bitmap = new Bitmap(openFileDialog.FileName);
-                (DataContext as ImageSomCompressorDataContext).OriginalImage = bitmap;
+                dataContext.OriginalImage = bitmap;
                 PrintImageOnGui(bitmap);
+                dataContext.IsProcessingEnable = true;
             }
         }
 
         private void OnBtnTrainClick(object sender, RoutedEventArgs e)
         {
             var dataContext = DataContext as ImageSomCompressorDataContext;
-            _lattice = new Lattice(dataContext.Width, dataContext.Height, InputDimension,
+            _lattice = new Lattice(dataContext.Width, dataContext.Height, INPUT_DIMENSION,
                 dataContext.NumberOfIterations,
                 dataContext.LearningRate);
             dataContext.ProgressBar = 0;

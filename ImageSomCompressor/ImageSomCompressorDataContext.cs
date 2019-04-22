@@ -14,12 +14,23 @@ namespace ImageSomCompressor
         private string _currentTime;
         private int _height;
         private BitmapImage _imageSource;
+        private bool _isProcessingEnable;
         private double _learningRate;
         private int _numberOfIterations;
         private Bitmap _originalImage;
         private double _progressBar;
         private Stopwatch _stopwatch;
         private int _width;
+
+        public bool IsProcessingEnable
+        {
+            get => _isProcessingEnable;
+            set
+            {
+                _isProcessingEnable = value;
+                OnPropertyChanged(nameof(IsProcessingEnable));
+            }
+        }
 
         public string CurrentTime
         {
