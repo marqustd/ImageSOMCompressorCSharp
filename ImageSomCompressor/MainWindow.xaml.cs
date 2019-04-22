@@ -90,23 +90,6 @@ namespace ImageSomCompressor
             _lattice.Train(input, worker);
         }
 
-        private Bitmap MakeBitmap(IEnumerable<IVector> input, int height, int width)
-        {
-            var array = input.ToArray();
-            var bitmap = new Bitmap(width, height);
-            var i = 0;
-            for (var y = 0; y < bitmap.Height; y++)
-            {
-                for (var x = 0; x < bitmap.Width; x++)
-                {
-                    var node = array[i++];
-                    bitmap.SetPixel(x, y, Color.FromArgb((int) node[0], (int) node[1], (int) node[2]));
-                }
-            }
-
-            return bitmap;
-        }
-
         private void OnBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var dataContext = DataContext as ImageSomCompressorDataContext;
@@ -169,7 +152,7 @@ namespace ImageSomCompressor
             var image = dataContext.OriginalImage;
             var input = dataContext.OriginalImage.ToVectors().ToArray();
             var result = _lattice.GenerateResult(input);
-            var bitmap = MakeBitmap(result, image.Height, image.Width);
+            var bitmap = result.ToBitmap(image.Height, image.Width);
             dataContext.ChangedImage = bitmap;
             PrintImageOnGui(bitmap);
         }

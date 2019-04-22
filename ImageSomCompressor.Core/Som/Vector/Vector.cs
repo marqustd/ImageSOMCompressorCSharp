@@ -5,6 +5,15 @@ namespace ImageSomCompressor.Core.Som.Vector
 {
     public class Vector : List<double>, IVector
     {
+        public int X { get; }
+        public int Y { get; }
+
+        public Vector(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
         public double EuclideanDistance(IVector vector)
         {
             if (vector.Count != Count)

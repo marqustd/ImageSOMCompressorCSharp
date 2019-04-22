@@ -8,7 +8,7 @@ namespace ImageSomCompressor.Core.Som.Neuron
         public Neuron(int numOfWeights)
         {
             var random = new Random();
-            Weights = new Vector.Vector();
+            Weights = new Vector.Vector(X,Y);
 
             for (var i = 0; i < numOfWeights; i++)
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using ImageSomCompressor.Core.Som.Neuron;
 using ImageSomCompressor.Core.Som.Vector;
@@ -69,14 +68,19 @@ namespace ImageSomCompressor.Core.Som.Lattice
             worker.ReportProgress(100);
         }
 
-        public IEnumerable<IVector> GenerateResult(IVector[] input)
+        public IEnumerable<IVector> GenerateResult(IEnumerable<IVector> input)
         {
-            return input.Select(CalculateBmu).Select(node => new Vector.Vector
+            var list = new List<IVector>();
+            foreach (var vector in input)
             {
-                node.R,
-                node.G,
-                node.B
-            });
+                var bmu = CalculateBmu(vector);
+                yield return new Vector.Vector(vector.X, vector.Y)
+                {
+                    bmu.R,
+                    bmu.G,
+                    bmu.B
+                };
+            }
         }
 
         internal (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)
@@ -145,12 +149,11 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         private void InitializeConnections(int inputDimension)
         {
-            Parallel.For(0, _width,
-                x =>
-                {
-                    Parallel.For(0, _height,
-                        y => { _lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
-                });
+            for (var x = 0; x < _width; x++)
+            {
+                Parallel.For(0, _height,
+                    y => { _lattice[x, y] = new Neuron.Neuron(inputDimension) {X = x, Y = y}; });
+            }
         }
     }
 }

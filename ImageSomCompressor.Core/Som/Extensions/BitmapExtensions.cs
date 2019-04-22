@@ -13,7 +13,7 @@ namespace ImageSomCompressor.Core.Som.Extensions
                 for (var x = 0; x < bitmap.Width; x++)
                 {
                     var pixel = bitmap.GetPixel(x, y);
-                    yield return new Vector.Vector
+                    yield return new Vector.Vector(x,y)
                     {
                         pixel.R,
                         pixel.G,
