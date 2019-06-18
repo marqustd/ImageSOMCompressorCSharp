@@ -70,7 +70,6 @@ namespace ImageSomCompressor.Core.Som.Lattice
 
         public IEnumerable<IVector> GenerateResult(IEnumerable<IVector> input)
         {
-            var list = new List<IVector>();
             foreach (var vector in input)
             {
                 var bmu = CalculateBmu(vector);
@@ -83,7 +82,36 @@ namespace ImageSomCompressor.Core.Som.Lattice
             }
         }
 
-        internal (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)
+        public IList<INeuron> Neurons
+        {
+            get
+            {
+                var list = new List<INeuron>();
+                for (var i = 0; i < _width; i++)
+                {
+                    for (var j = 0; j < _height; j++)
+                    {
+                        list.Add(_lattice[i, j]);
+                    }
+                }
+
+                return list;
+            }
+        }
+
+        public IList<byte> GenerateResultBytes(IEnumerable<IVector> input)
+        {
+            var list = new List<byte>();
+            foreach (var vector in input)
+            {
+                var bmu = CalculateBmu(vector);
+                list.Add((byte) (bmu.Y * _width + bmu.X));
+            }
+
+            return list;
+        }
+
+        private (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)
         {
             var xStart = (int) (bmu.X - currentRadius - 1);
             xStart = xStart < 0 ? 0 : xStart;
@@ -121,7 +149,7 @@ namespace ImageSomCompressor.Core.Som.Lattice
             return _matrixRadius * Math.Exp(-iteration / _timeConstant);
         }
 
-        private double GetDistanceDrop(double distance, double radius)
+        private static double GetDistanceDrop(double distance, double radius)
         {
             return Math.Exp(-(Math.Pow(distance, 2.0) / Math.Pow(radius, 2.0)));
         }

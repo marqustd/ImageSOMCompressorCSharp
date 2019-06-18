@@ -18,9 +18,9 @@ namespace ImageSomCompressor.Core.Som.Neuron
 
         public int X { get; set; }
         public int Y { get; set; }
-        public int R { get; private set; }
-        public int G { get; private set; }
-        public int B { get; private set; }
+        public byte R { get; private set; }
+        public byte G { get; private set; }
+        public byte B { get; private set; }
         public IVector Weights { get; }
 
         public void SetWeight(int index, double value)
@@ -55,9 +55,9 @@ namespace ImageSomCompressor.Core.Som.Neuron
                 Weights[i] += distanceDecay * learningRate * (input[i] - Weights[i]);
             }
 
-            R = (int) ((R + input[0]) / 2);
-            G = (int) ((R + input[1]) / 2);
-            B = (int) ((R + input[2]) / 2);
+            R = (byte) ((R + input[0]) / 2);
+            G = (byte) ((R + input[1]) / 2);
+            B = (byte) ((R + input[2]) / 2);
         }
 
         public double Distance(INeuron neuron)

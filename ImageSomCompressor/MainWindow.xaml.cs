@@ -9,9 +9,11 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using ImageSomCompressor.Core;
 using ImageSomCompressor.Core.Som.Extensions;
 using ImageSomCompressor.Core.Som.Lattice;
 using ImageSomCompressor.Core.Som.Vector;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ImageSomCompressor
 {
@@ -20,12 +22,14 @@ namespace ImageSomCompressor
         private const int INPUT_DIMENSION = 3; //cuz of RGB
         private readonly BackgroundWorker _backgroundWorker;
         private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private readonly ImageSomCompressorDataContext _dataContext;
         private ILattice _lattice;
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ImageSomCompressorDataContext();
+            _dataContext = new ImageSomCompressorDataContext();
+            DataContext = _dataContext;
             _lattice = new Lattice(3, 3, INPUT_DIMENSION, 100, 0.5);
             _backgroundWorker = new BackgroundWorker
             {
@@ -43,41 +47,39 @@ namespace ImageSomCompressor
 
         private void OnBackgroundWorker_ProgressChanged_Complete(object sender, RunWorkerCompletedEventArgs e)
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
             if (e.Cancelled)
             {
-                //canceled
+                MessageBox.Show("Learning has been canceled");
             }
             else if (e.Error != null)
             {
-                //error
+                MessageBox.Show(e.Error.Message);
             }
             else
             {
-                dataContext.Stopwatch.Stop();
+                MessageBox.Show("Learning has ended");
+                _dataContext.Stopwatch.Stop();
                 _dispatcherTimer.Stop();
             }
         }
 
         private void OnDispatcherTimer_Tick(object sender, EventArgs e)
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
-            if (!dataContext.Stopwatch.IsRunning)
+            if (!_dataContext.Stopwatch.IsRunning)
             {
                 return;
             }
 
-            var ts = dataContext.Stopwatch.Elapsed;
-            dataContext.CurrentTime = $"{ts.Minutes:00}:{ts.Seconds:00}";
+            var ts = _dataContext.Stopwatch.Elapsed;
+            _dataContext.CurrentTime = $"{ts.Minutes:00}:{ts.Seconds:00}";
         }
 
         private void SetStartValues()
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
-            dataContext.Width = 3;
-            dataContext.Height = 3;
-            dataContext.LearningRate = 0.5d;
-            dataContext.NumberOfIterations = 30;
+            _dataContext.Width = 3;
+            _dataContext.Height = 3;
+            _dataContext.LearningRate = 0.5d;
+            _dataContext.NumberOfIterations = 30;
         }
 
         private void OnBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -91,15 +93,13 @@ namespace ImageSomCompressor
 
         private void OnBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
-            dataContext.ProgressBar = e.ProgressPercentage;
-            dataContext.CurrentIteration =
-                $"{(int) ((float) e.ProgressPercentage / 100 * dataContext.NumberOfIterations)}/{dataContext.NumberOfIterations}";
+            _dataContext.ProgressBar = e.ProgressPercentage;
+            _dataContext.CurrentIteration =
+                $"{(int) ((float) e.ProgressPercentage / 100 * _dataContext.NumberOfIterations)}/{_dataContext.NumberOfIterations}";
         }
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
             SetStartValues();
             var openFileDialog = new OpenFileDialog
             {
@@ -108,24 +108,23 @@ namespace ImageSomCompressor
             };
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                dataContext.IsProcessingEnable = false;
+                _dataContext.IsProcessingEnable = false;
                 var bitmap = new Bitmap(openFileDialog.FileName);
-                dataContext.OriginalImage = bitmap;
+                _dataContext.OriginalImage = bitmap;
                 PrintImageOnGui(bitmap);
-                dataContext.IsProcessingEnable = true;
+                _dataContext.IsProcessingEnable = true;
             }
         }
 
         private void OnBtnTrainClick(object sender, RoutedEventArgs e)
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
-            _lattice = new Lattice(dataContext.Width, dataContext.Height, INPUT_DIMENSION,
-                dataContext.NumberOfIterations,
-                dataContext.LearningRate);
-            dataContext.ProgressBar = 0;
-            dataContext.Stopwatch = Stopwatch.StartNew();
+            _lattice = new Lattice(_dataContext.Width, _dataContext.Height, INPUT_DIMENSION,
+                _dataContext.NumberOfIterations,
+                _dataContext.LearningRate);
+            _dataContext.ProgressBar = 0;
+            _dataContext.Stopwatch = Stopwatch.StartNew();
             _dispatcherTimer.Start();
-            var input = (DataContext as ImageSomCompressorDataContext).OriginalImage.ToVectors().ToArray();
+            var input = _dataContext.OriginalImage.ToVectors().ToArray();
             _backgroundWorker.RunWorkerAsync(input);
         }
 
@@ -150,12 +149,11 @@ namespace ImageSomCompressor
 
         private void ShowChangedImage()
         {
-            var dataContext = DataContext as ImageSomCompressorDataContext;
-            var image = dataContext.OriginalImage;
-            var input = dataContext.OriginalImage.ToVectors().ToArray();
+            var image = _dataContext.OriginalImage;
+            var input = _dataContext.OriginalImage.ToVectors().ToArray();
             var result = _lattice.GenerateResult(input);
             var bitmap = result.ToBitmap(image.Height, image.Width);
-            dataContext.ChangedImage = bitmap;
+            _dataContext.ChangedImage = bitmap;
             PrintImageOnGui(bitmap);
         }
 
@@ -168,22 +166,27 @@ namespace ImageSomCompressor
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
+                Filter = "SomCompressed|*.som|JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
                 Title = "Please select an image file.",
                 FileName = "Result"
             };
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                var bitmap = (DataContext as ImageSomCompressorDataContext).ChangedImage;
+                var bitmap = _dataContext.ChangedImage;
                 switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Jpeg);
+                        var input = _dataContext.OriginalImage.ToVectors().ToArray();
+                        new FileHelper().SaveToFile(saveFileDialog.FileName, _lattice.GenerateResultBytes(input), _lattice.Neurons, bitmap.Width,
+                            bitmap.Height);
                         break;
                     case 2:
-                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);
+                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Jpeg);
                         break;
                     case 3:
+                        bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);
+                        break;
+                    case 4:
                         bitmap.Save(saveFileDialog.FileName, ImageFormat.Bmp);
                         break;
                 }
