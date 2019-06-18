@@ -21,8 +21,8 @@ namespace ImageSomCompressor
     {
         private const int INPUT_DIMENSION = 3; //cuz of RGB
         private readonly BackgroundWorker _backgroundWorker;
-        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private readonly ImageSomCompressorDataContext _dataContext;
+        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         private ILattice _lattice;
 
         public MainWindow()
@@ -177,7 +177,8 @@ namespace ImageSomCompressor
                 {
                     case 1:
                         var input = _dataContext.OriginalImage.ToVectors().ToArray();
-                        new FileHelper().SaveToFile(saveFileDialog.FileName, _lattice.GenerateResultBytes(input), _lattice.Neurons, bitmap.Width,
+                        new FileHelper().SaveToFile(saveFileDialog.FileName, _lattice.GenerateResultBytes(input),
+                            _lattice.Neurons, bitmap.Width,
                             bitmap.Height);
                         break;
                     case 2:

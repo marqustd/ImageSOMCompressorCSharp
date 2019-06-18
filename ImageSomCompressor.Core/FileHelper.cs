@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using ImageSomCompressor.Core.Models;
 using ImageSomCompressor.Core.Som.Neuron;
@@ -20,11 +22,26 @@ namespace ImageSomCompressor.Core
             SaveToFile(filename, model);
         }
 
-        public void ReadFromFile(string filename)
+        public Bitmap ReadFromFile(string filename)
         {
-            using (var inputFile = new StreamReader(filename))
+            using (var inputFile = new BinaryReader(new FileStream(filename, FileMode.Open)))
             {
-                //inputFile.
+                var neuronsNumber = inputFile.ReadInt32();
+                var list = new List<Pixel>();
+                for (var i = 0; i < neuronsNumber; i++)
+                {
+                    list.Add(new Pixel
+                    {
+                        R = inputFile.ReadByte(),
+                        G = inputFile.ReadByte(),
+                        B = inputFile.ReadByte()
+                    });
+                }
+
+                var width = inputFile.ReadInt32();
+                var height = inputFile.ReadInt32();
+
+
             }
         }
 
@@ -32,7 +49,7 @@ namespace ImageSomCompressor.Core
         {
             using (var outputFile = new BinaryWriter(new FileStream(filename, FileMode.OpenOrCreate)))
             {
-                outputFile.Write((byte)model.Neurons.Count);
+                outputFile.Write((byte) model.Neurons.Count);
                 foreach (var neuron in model.Neurons)
                 {
                     outputFile.Write(neuron.R);
@@ -51,6 +68,12 @@ namespace ImageSomCompressor.Core
                     if (model.Input[i] == former)
                     {
                         count++;
+
+                        if (i == model.Input.Count - 1)
+                        {
+                            outputFile.Write(former);
+                            outputFile.Write(count);
+                        }
                     }
                     else
                     {
