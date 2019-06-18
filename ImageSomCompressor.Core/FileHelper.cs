@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using ImageSomCompressor.Core.Models;
@@ -24,24 +23,46 @@ namespace ImageSomCompressor.Core
 
         public Bitmap ReadFromFile(string filename)
         {
-            using (var inputFile = new BinaryReader(new FileStream(filename, FileMode.Open)))
+            using (var stream = new FileStream(filename, FileMode.Open))
             {
-                var neuronsNumber = inputFile.ReadInt32();
-                var list = new List<Pixel>();
-                for (var i = 0; i < neuronsNumber; i++)
+                using (var inputFile = new BinaryReader(stream))
                 {
-                    list.Add(new Pixel
+                    var neuronsNumber = inputFile.ReadByte();
+                    var list = new List<Pixel>();
+                    for (var i = 0; i < neuronsNumber; i++)
+                        list.Add(new Pixel
+                        {
+                            R = inputFile.ReadByte(),
+                            G = inputFile.ReadByte(),
+                            B = inputFile.ReadByte()
+                        });
+
+                    var width = inputFile.ReadInt32();
+                    var height = inputFile.ReadInt32();
+
+                    var pixels = new List<Pixel>();
+
+                    while (inputFile.BaseStream.Position != inputFile.BaseStream.Length)
                     {
-                        R = inputFile.ReadByte(),
-                        G = inputFile.ReadByte(),
-                        B = inputFile.ReadByte()
-                    });
+                        var index = inputFile.ReadByte();
+                        var number = inputFile.ReadByte();
+
+                        for (var i = 0; i < number; i++) pixels.Add(new Pixel(list[index]));
+                    }
+
+                    var bitmap = new Bitmap(width, height);
+                    var p = 0;
+
+                    for (var y = 0; y < height; y++)
+                    for (var x = 0; x < width; x++)
+                    {
+                        var pixel = pixels[p++];
+                        ;
+                        bitmap.SetPixel(x, y, Color.FromArgb(pixel.R, pixel.G, pixel.B));
+                    }
+
+                    return bitmap;
                 }
-
-                var width = inputFile.ReadInt32();
-                var height = inputFile.ReadInt32();
-
-
             }
         }
 
@@ -61,11 +82,10 @@ namespace ImageSomCompressor.Core
                 outputFile.Write(model.Height);
 
                 var former = model.Input[0];
-                var count = 0;
+                byte count = 0;
 
                 for (var i = 0; i < model.Input.Count; i++)
-                {
-                    if (model.Input[i] == former)
+                    if (model.Input[i] == former && count < byte.MaxValue)
                     {
                         count++;
 
@@ -83,7 +103,6 @@ namespace ImageSomCompressor.Core
                         former = model.Input[i];
                         count = 1;
                     }
-                }
             }
         }
     }

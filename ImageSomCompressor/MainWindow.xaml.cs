@@ -65,10 +65,7 @@ namespace ImageSomCompressor
 
         private void OnDispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (!_dataContext.Stopwatch.IsRunning)
-            {
-                return;
-            }
+            if (!_dataContext.Stopwatch.IsRunning) return;
 
             var ts = _dataContext.Stopwatch.Elapsed;
             _dataContext.CurrentTime = $"{ts.Minutes:00}:{ts.Seconds:00}";
@@ -103,13 +100,23 @@ namespace ImageSomCompressor
             SetStartValues();
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
+                Filter = "SomCompressed|*.som|JPeg Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp",
                 Title = "Please select an image file."
             };
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                Bitmap bitmap;
+                switch (openFileDialog.FilterIndex)
+                {
+                    case 1:
+                        bitmap = new FileHelper().ReadFromFile(openFileDialog.FileName);
+                        break;
+                    default:
+                        bitmap = new Bitmap(openFileDialog.FileName);
+                        break;
+                }
+
                 _dataContext.IsProcessingEnable = false;
-                var bitmap = new Bitmap(openFileDialog.FileName);
                 _dataContext.OriginalImage = bitmap;
                 PrintImageOnGui(bitmap);
                 _dataContext.IsProcessingEnable = true;
