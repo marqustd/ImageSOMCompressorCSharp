@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ImageSomCompressor"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Image SOM Compressor" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
