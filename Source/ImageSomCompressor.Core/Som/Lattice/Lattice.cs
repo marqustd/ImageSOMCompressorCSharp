@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -39,26 +39,13 @@ namespace ImageSomCompressor.Core.Som.Lattice
             {
                 var currentRadius = CalculateNeighborhoodRadius(_iteration);
 
-                Parallel.ForEach(input, currentInput =>
+                var tasks = new List<Task>();
+                foreach (var currentInput in input)
                 {
-                    var bmu = CalculateBmu(currentInput);
+                    tasks.Add(Iterate(currentRadius, currentInput));
+                }
 
-                    var (xStart, xEnd, yStart, yEnd) = GetRadiusIndexes(bmu, currentRadius);
-
-                    for (var x = xStart; x < xEnd; x++)
-                    {
-                        for (var y = yStart; y < yEnd; y++)
-                        {
-                            var processingNeuron = GetNeuron(x, y);
-                            var distance = bmu.Distance(processingNeuron);
-                            if (distance <= Math.Pow(currentRadius, 2.0))
-                            {
-                                var distanceDrop = GetDistanceDrop(distance, currentRadius);
-                                processingNeuron.UpdateWeights(currentInput, _learningRate, distanceDrop);
-                            }
-                        }
-                    }
-                });
+                Task.WhenAll(tasks).Wait();
 
                 worker.ReportProgress((int) (_iteration / (float) _numberOfIterations * 100));
                 _iteration++;
@@ -109,6 +96,29 @@ namespace ImageSomCompressor.Core.Som.Lattice
             }
 
             return list;
+        }
+
+        private Task Iterate(double currentRadius, IVector currentInput)
+        {
+            var bmu = CalculateBmu(currentInput);
+
+            var (xStart, xEnd, yStart, yEnd) = GetRadiusIndexes(bmu, currentRadius);
+
+            for (var x = xStart; x < xEnd; x++)
+            {
+                for (var y = yStart; y < yEnd; y++)
+                {
+                    var processingNeuron = GetNeuron(x, y);
+                    var distance = bmu.Distance(processingNeuron);
+                    if (distance <= Math.Pow(currentRadius, 2.0))
+                    {
+                        var distanceDrop = GetDistanceDrop(distance, currentRadius);
+                        processingNeuron.UpdateWeights(currentInput, _learningRate, distanceDrop);
+                    }
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         private (int xStart, int xEnd, int yStart, int yEnd) GetRadiusIndexes(INeuron bmu, double currentRadius)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -65,7 +65,10 @@ namespace ImageSomCompressor
 
         private void OnDispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (!_dataContext.Stopwatch.IsRunning) return;
+            if (!_dataContext.Stopwatch.IsRunning)
+            {
+                return;
+            }
 
             var ts = _dataContext.Stopwatch.Elapsed;
             _dataContext.CurrentTime = $"{ts.Minutes:00}:{ts.Seconds:00}";
@@ -75,7 +78,7 @@ namespace ImageSomCompressor
         {
             _dataContext.Width = 3;
             _dataContext.Height = 3;
-            _dataContext.LearningRate = 0.5d;
+            _dataContext.LearningRate = 0.5f;
             _dataContext.NumberOfIterations = 30;
         }
 
@@ -92,7 +95,7 @@ namespace ImageSomCompressor
         {
             _dataContext.ProgressBar = e.ProgressPercentage;
             _dataContext.CurrentIteration =
-                $"{(int) ((float) e.ProgressPercentage / 100 * _dataContext.NumberOfIterations)}/{_dataContext.NumberOfIterations}";
+                $"{(int)((float)e.ProgressPercentage / 100 * _dataContext.NumberOfIterations)}/{_dataContext.NumberOfIterations}";
         }
 
         private void OnBtnLoadClick(object sender, RoutedEventArgs e)
@@ -179,7 +182,7 @@ namespace ImageSomCompressor
             };
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                var bitmap = _dataContext.ChangedImage;
+                var bitmap = _dataContext.ChangedImage ?? _dataContext.OriginalImage;
                 switch (saveFileDialog.FilterIndex)
                 {
                     case 1:

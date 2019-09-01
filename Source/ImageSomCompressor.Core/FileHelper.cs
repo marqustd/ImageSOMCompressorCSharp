@@ -27,38 +27,44 @@ namespace ImageSomCompressor.Core
             {
                 using (var inputFile = new BinaryReader(stream))
                 {
-                    var neuronsNumber = inputFile.ReadByte();
+                    var neuronsNumber = inputFile.ReadByte() + 1;
                     var list = new List<Pixel>();
                     for (var i = 0; i < neuronsNumber; i++)
+                    {
                         list.Add(new Pixel
                         {
                             R = inputFile.ReadByte(),
                             G = inputFile.ReadByte(),
                             B = inputFile.ReadByte()
                         });
+                    }
 
                     var width = inputFile.ReadInt32();
                     var height = inputFile.ReadInt32();
 
                     var pixels = new List<Pixel>();
 
-                    while (inputFile.BaseStream.Position != inputFile.BaseStream.Length)
+                    while (inputFile.BaseStream.Position < inputFile.BaseStream.Length - 1)
                     {
                         var index = inputFile.ReadByte();
                         var number = inputFile.ReadByte();
 
-                        for (var i = 0; i < number; i++) pixels.Add(new Pixel(list[index]));
+                        for (var i = 0; i < number; i++)
+                        {
+                            pixels.Add(new Pixel(list[index]));
+                        }
                     }
 
                     var bitmap = new Bitmap(width, height);
                     var p = 0;
 
                     for (var y = 0; y < height; y++)
-                    for (var x = 0; x < width; x++)
                     {
-                        var pixel = pixels[p++];
-                        ;
-                        bitmap.SetPixel(x, y, Color.FromArgb(pixel.R, pixel.G, pixel.B));
+                        for (var x = 0; x < width; x++)
+                        {
+                            var pixel = pixels[p++];
+                            bitmap.SetPixel(x, y, Color.FromArgb(pixel.R, pixel.G, pixel.B));
+                        }
                     }
 
                     return bitmap;
@@ -70,7 +76,7 @@ namespace ImageSomCompressor.Core
         {
             using (var outputFile = new BinaryWriter(new FileStream(filename, FileMode.OpenOrCreate)))
             {
-                outputFile.Write((byte) model.Neurons.Count);
+                outputFile.Write((byte) (model.Neurons.Count - 1));
                 foreach (var neuron in model.Neurons)
                 {
                     outputFile.Write(neuron.R);
@@ -85,6 +91,7 @@ namespace ImageSomCompressor.Core
                 byte count = 0;
 
                 for (var i = 0; i < model.Input.Count; i++)
+                {
                     if (model.Input[i] == former && count < byte.MaxValue)
                     {
                         count++;
@@ -103,6 +110,7 @@ namespace ImageSomCompressor.Core
                         former = model.Input[i];
                         count = 1;
                     }
+                }
             }
         }
     }
